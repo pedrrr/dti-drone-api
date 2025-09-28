@@ -34,7 +34,6 @@ class DroneServiceImplTest {
 
     @Test
     void testFindAll_ShouldReturnAllDrones() {
-        // Given
         Drone drone1 = Drone.builder()
                 .id(1L)
                 .positionX(1)
@@ -58,7 +57,6 @@ class DroneServiceImplTest {
         List<Drone> expectedDrones = Arrays.asList(drone1, drone2);
         when(droneRepository.findAll()).thenReturn(expectedDrones);
 
-        // When
         List<Drone> result = droneService.findAll();
 
         // Then
@@ -69,10 +67,8 @@ class DroneServiceImplTest {
 
     @Test
     void testFindAll_ShouldReturnEmptyList_WhenNoDrones() {
-        // Given
         when(droneRepository.findAll()).thenReturn(Arrays.asList());
 
-        // When
         List<Drone> result = droneService.findAll();
 
         // Then
@@ -82,7 +78,6 @@ class DroneServiceImplTest {
 
     @Test
     void testFindById_ShouldReturnDrone_WhenExists() {
-        // Given
         Drone expectedDrone = Drone.builder()
                 .id(1L)
                 .positionX(1)
@@ -95,7 +90,6 @@ class DroneServiceImplTest {
 
         when(droneRepository.findById(1L)).thenReturn(Optional.of(expectedDrone));
 
-        // When
         Optional<Drone> result = droneService.findById(1L);
 
         // Then
@@ -106,10 +100,8 @@ class DroneServiceImplTest {
 
     @Test
     void testFindById_ShouldReturnEmpty_WhenNotExists() {
-        // Given
         when(droneRepository.findById(1L)).thenReturn(Optional.empty());
 
-        // When
         Optional<Drone> result = droneService.findById(1L);
 
         // Then
@@ -119,7 +111,6 @@ class DroneServiceImplTest {
 
     @Test
     void testCreateDrone_ShouldCreateDroneWithDefaultValues() {
-        // Given
         DroneCreateRequestDTO requestDTO = new DroneCreateRequestDTO(40, 25, 5, 10);
 
         Drone savedDrone = Drone.builder()
@@ -136,7 +127,6 @@ class DroneServiceImplTest {
 
         when(droneRepository.save(any(Drone.class))).thenReturn(savedDrone);
 
-        // When
         Drone result = droneService.createDrone(requestDTO);
 
         // Then
@@ -157,7 +147,6 @@ class DroneServiceImplTest {
 
     @Test
     void testCreateDrone_ShouldSetDefaultValues_WhenNotProvided() {
-        // Given
         DroneCreateRequestDTO requestDTO = new DroneCreateRequestDTO(0, 0, 0, 0);
 
         Drone savedDrone = Drone.builder()
@@ -174,7 +163,6 @@ class DroneServiceImplTest {
 
         when(droneRepository.save(any(Drone.class))).thenReturn(savedDrone);
 
-        // When
         Drone result = droneService.createDrone(requestDTO);
 
         // Then
@@ -190,20 +178,17 @@ class DroneServiceImplTest {
 
     @Test
     void testCreateDrone_ShouldHandleRepositoryException() {
-        // Given
         DroneCreateRequestDTO requestDTO = new DroneCreateRequestDTO(50, 20, 1, 1);
 
         when(droneRepository.save(any(Drone.class)))
                 .thenThrow(new RuntimeException("Database error"));
 
-        // When & Then
         assertThrows(RuntimeException.class, () -> droneService.createDrone(requestDTO));
         verify(droneRepository).save(any(Drone.class));
     }
 
     @Test
     void testCreateDrone_ShouldPreserveRequestData() {
-        // Given
         DroneCreateRequestDTO requestDTO = new DroneCreateRequestDTO(75, 30, 15, 25);
 
         Drone savedDrone = Drone.builder()
@@ -220,10 +205,8 @@ class DroneServiceImplTest {
 
         when(droneRepository.save(any(Drone.class))).thenReturn(savedDrone);
 
-        // When
         Drone result = droneService.createDrone(requestDTO);
 
-        // Then
         assertEquals(15, result.getPositionX());
         assertEquals(25, result.getPositionY());
         assertEquals(50, result.getWeightLimit());

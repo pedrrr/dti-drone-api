@@ -1,99 +1,31 @@
-# Drone API - Sistema de Gerenciamento de Drones
+# GUIA COMPLETO DE TESTES - SISTEMA DE DRONES #
+- Prompt de contexto utilizado se encontra no diretório artefatos
+## **PRÉ-REQUISITOS**
+- IntelliJ IDEA aberto com o projeto
+- Postman instalado (ou usar curl)
+- Aplicação rodando na porta 8080
 
-Uma API REST para gerenciamento de drones e alocação de pedidos, desenvolvida em Spring Boot com Java 17+.
+## **SEQUÊNCIA DE TESTES RECOMENDADA**
 
-## 📋 Funcionalidades
-
-- **Gerenciamento de Drones**: Criação, consulta e monitoramento de drones
-- **Gerenciamento de Pedidos**: Criação e consulta de pedidos de entrega
-- **Alocação Inteligente**: Sistema automático de alocação de pedidos para drones disponíveis
-- **Simulação de Voo**: Simulação de voos dos drones com pedidos
-- **Validação Robusta**: Validação de capacidade, distância e bateria dos drones
-- **Monitoramento**: Sistema de monitoramento em tempo real
-
-## 🚀 Tecnologias Utilizadas
-
-- **Java 17+**
-- **Spring Boot 3.5.6**
-- **Spring Web MVC**
-- **Spring Validation**
-- **MapStruct** (Mapeamento de DTOs)
-- **JUnit 5** (Testes unitários)
-- **Mockito** (Mocking para testes)
-- **Maven** (Gerenciamento de dependências)
-
-## 📁 Estrutura do Projeto
-
-```
-src/
-├── main/java/com/examble/drone_api/
-│   ├── config/           # Configurações da aplicação
-│   ├── controller/       # Controladores REST
-│   ├── dto/             # Data Transfer Objects
-│   ├── exception/       # Tratamento de exceções
-│   ├── mapper/          # Mapeadores MapStruct
-│   ├── model/           # Entidades do domínio
-│   ├── repository/      # Repositórios de dados
-│   ├── service/         # Lógica de negócio
-│   └── validation/      # Validações customizadas
-└── test/java/           # Testes unitários
-```
-
-## 🛠️ Pré-requisitos
-
-- Java 17 ou superior
-- Maven 3.6 ou superior
-- IDE de sua preferência (IntelliJ IDEA, Eclipse, VS Code)
-
-## 📦 Instalação e Execução
-
-### 1. Clone o repositório
+### **1. INICIAR A APLICAÇÃO**
 ```bash
-git clone <url-do-repositorio>
-cd drone-api
-```
-
-### 2. Compile o projeto
-```bash
-mvn clean compile
-```
-
-### 3. Execute os testes
-```bash
-mvn test
-```
-
-### 4. Execute a aplicação
-```bash
+# No terminal do IntelliJ ou cmd:
 mvn spring-boot:run
 ```
+**Esperado:** Aplicação inicia sem erros na porta 8080
 
-A aplicação estará disponível em: `http://localhost:8080`
+---
 
-## 🔧 Configuração
-
-### Porta da Aplicação
-A aplicação roda na porta 8080 por padrão. Para alterar, edite o arquivo `application.properties`:
-
-```properties
-server.port=8081
+### **2. CRIAR DRONES** 
+**3 drones** com diferentes capacidades:
+```http
+POST http://localhost:8080/api/v1/drones
+Content-Type: application/json
 ```
 
-### Configurações de Validação
-As validações estão configuradas nos DTOs com anotações Bean Validation:
 
-- **Drone**: Limite de peso (50 kg), distância (1-100 km), posição (1-100)
-- **Pedido**: Coordenadas (1-100), peso (1-1000 kg)
-
-## 📚 API Endpoints
-
-### Drones
-
-#### Criar Drone
-```http
-POST /api/v1/drones
-Content-Type: application/json
-
+```json
+// Drone 1
 {
   "weightLimit": 50,
   "distancePerCargo": 20,
@@ -101,145 +33,260 @@ Content-Type: application/json
   "positionY": 1
 }
 ```
-
-#### Listar Todos os Drones
-```http
-GET /api/v1/drones
-```
-
-#### Buscar Drone por ID
-```http
-GET /api/v1/drones/{id}
-```
-
-#### Iniciar Voo dos Drones
-```http
-POST /api/v1/drones/fly
-```
-
-### Pedidos
-
-#### Criar Pedido
-```http
-POST /api/v1/pedidos
-Content-Type: application/json
-
+```json
+// Drone 2
 {
-  "destinationX": 10,
-  "destinationY": 15,
-  "weight": 25,
+  "weightLimit": 30,
+  "distancePerCargo": 15,
+  "positionX": 1,
+  "positionY": 1
+}
+```
+```json
+// Drone 3
+{
+  "weightLimit": 70,
+  "distancePerCargo": 25,
+  "positionX": 1,
+  "positionY": 1
+}
+```
+
+Drones criados com ID, bateria 100%, estado IDLE
+
+---
+
+### **3. VERIFICAR DRONES CRIADOS**
+```http
+GET http://localhost:8080/api/v1/drones
+```
+
+**Esperado:** Lista com 3 drones, todos na posição escolhida (1,1), bateria 100%, estado IDLE
+
+---
+
+### **4. CRIAR PEDIDOS (TESTE DE ALOCAÇÃO AUTOMÁTICA)**
+
+#### **Pedido 1 - Alta Prioridade**
+```http
+POST http://localhost:8080/api/v1/pedidos
+Content-Type: application/json
+```
+``` json
+{
+"destinationX": 5,
+"destinationY": 5,
+"weight": 10,
+"priority": "HIGH"
+}
+```
+
+#### **Pedido 2 - Média Prioridade**
+```http
+POST http://localhost:8080/api/v1/pedidos
+Content-Type: application/json
+```
+```json
+{
+"destinationX": 10,
+"destinationY": 8,
+"weight": 15,
+"priority": "MEDIUM"
+}
+```
+
+#### **Pedido 3 - Baixa Prioridade**
+```http
+POST http://localhost:8080/api/v1/pedidos
+Content-Type: application/json
+```
+```json
+{
+  "destinationX": 3,
+  "destinationY": 3,
+  "weight": 8,
+  "priority": "LOW"
+}
+```
+
+Cada pedido é automaticamente alocado no melhor drone disponível
+
+---
+
+### **5. VERIFICAR ALOCAÇÃO DOS PEDIDOS**
+```http
+GET http://localhost:8080/api/v1/drones
+```
+
+Drones mostram `orderList` com pedidos alocados de forma otimizada pelo sistema
+
+---
+
+### **6. INICIAR VOOS (TESTE DA SIMULAÇÃO)**
+```http
+POST http://localhost:8080/api/v1/drones/fly
+```
+
+Resposta com quantidade de drones que iniciaram voo
+```json
+{
+  "message": "Comando de voo executado com sucesso",
+  "dronesWithOrders": 3,
+  "dronesStarted": 3,
+  "timestamp": "2024-01-15T10:30:00"
+}
+```
+
+---
+
+### **7. MONITORAR SIMULAÇÃO EM TEMPO REAL**
+
+**Execute repetidamente (a cada 5-10 segundos):**
+```http
+GET http://localhost:8080/api/v1/drones
+```
+
+**Você deve observar:**
+- Drones mudando de `IDLE` → `IN_FLIGHT`
+- Posições `positionX` e `positionY` mudando gradualmente
+- Bateria `battery` diminuindo conforme movimento
+- Estados mudando: `IN_FLIGHT` → `DELIVERING` → `RETURNING_TO_BASE` → `IDLE`
+
+---
+
+### **8. TESTAR VALIDAÇÕES (PEDIDOS INVÁLIDOS)**
+
+#### **Pedido que excede peso máximo:**
+```http
+POST http://localhost:8080/api/v1/pedidos
+Content-Type: application/json
+```
+```json
+{
+  "destinationX": 5,
+  "destinationY": 5,
+  "weight": 100,
   "priority": "HIGH"
 }
 ```
 
-#### Listar Todos os Pedidos
+Erro 400 - "Peso não pode exceder 50 kg"
+
+#### **Drone com posição inválida:**
 ```http
-GET /api/v1/pedidos
+POST http://localhost:8080/api/v1/drones
+Content-Type: application/json
+```
+```json
+{
+  "weightLimit": 50,
+  "distancePerCargo": 20,
+  "positionX": 0,
+  "positionY": 1
+}
 ```
 
-#### Buscar Pedido por ID
+Erro 400 - "Posição X deve ser maior que 0"
+
+---
+
+### **9. TESTAR RECARGA AUTOMÁTICA**
+
+**Para testar recarga:**
+1. Crie um drone com bateria baixa (simule no código ou aguarde uso natural)
+2. Observe quando bateria < 80% e drone está na base (1,1)
+3. Verifique mudança para estado `RECHARGING`
+4. Aguarde alguns segundos e veja bateria voltar a 100%
+
+---
+
+### **10. TESTE DE STRESS - MÚLTIPLOS PEDIDOS**
+
+**Crie vários pedidos rapidamente:**
 ```http
-GET /api/v1/pedidos/{id}
+POST http://localhost:8080/api/v1/pedidos
+Content-Type: application/json
+```
+```json
+{
+  "destinationX": 7,
+  "destinationY": 7,
+  "weight": 12,
+  "priority": "HIGH"
+}
 ```
 
-## 🧪 Testes
+**Repita 5-10 vezes com coordenadas diferentes**
 
-O projeto possui uma cobertura abrangente de testes unitários:
+**Esperado:** Sistema realoca automaticamente todos os pedidos de forma otimizada
 
-### Executar Todos os Testes
-```bash
-mvn test
+---
+
+## **OBSERVAÇÕES IMPORTANTES**
+
+### **Logs para Monitorar:**
+- Pedidos alocados: `"Pedido X alocado no drone Y"`
+- Pedidos não alocados: `"Pedido X não pôde ser alocado"`
+- Movimento: `"Drone X moveu de (a,b) para (c,d)"`
+- Mudança de estado: `"Drone X iniciou voo"`, `"Drone X entregou pedido"`
+
+### **Estados dos Drones:**
+- `IDLE`: Disponível para pedidos
+- `IN_FLIGHT`: Movendo para destino
+- `DELIVERING`: Entregando no destino
+- `RETURNING_TO_BASE`: Voltando para base
+- `RECHARGING`: Carregando bateria
+
+### **Pontos de Verificação:**
+1. Alocação automática funciona
+2. Simulação de movimento funciona
+3. Estados mudam corretamente
+4. Bateria drena e recarrega
+5. Validações impedem dados inválidos
+6. Sistema otimiza distribuição
+
+---
+
+## **SOLUÇÃO DE PROBLEMAS**
+
+### **Se a aplicação não iniciar:**
+1. Verifique se Java 17 está instalado
+2. Execute `mvn clean compile` primeiro
+3. Verifique logs de erro no console
+
+### **Se pedidos não forem alocados:**
+1. Verifique se drones estão em estado `IDLE`
+2. Confirme se drones estão na base (1,1)
+3. Verifique se bateria >= 20%
+
+### **Se simulação não funcionar:**
+1. Aguarde alguns segundos após `/fly`
+2. Verifique logs para mensagens de erro
+3. Confirme se drones têm pedidos alocados
+
+---
+
+## **GERAIS DO SISTEMA**
+
+Após a análise, você identificará implementados:
+- Sistema funcionando perfeitamente
+- Drones se movendo pela malha
+- Entregas sendo realizadas
+- Bateria sendo gerenciada
+- Validações funcionando
+- Otimização de alocação ativa
+
+## ALGORITMO DE ALOCAÇÃO
+
+O sistema usa um score de eficiência que considera:
+- **Distância** até o destino
+- **Nível de bateria** (penaliza baixa bateria)
+- **Utilização de peso** (otimiza capacidade)
+- **Prioridade** dos pedidos (HIGH primeiro)
+
+**Fórmula do Score:**
+```
+Score = Distância + (1 - Bateria/100) × 10 + (Peso_Utilizado/Peso_Máximo) × 5
 ```
 
-### Executar Testes com Relatório de Cobertura
-```bash
-mvn test jacoco:report
-```
-
-### Estrutura dos Testes
-- **Model Tests**: Testes das entidades Drone e Order
-- **Service Tests**: Testes da lógica de negócio
-- **Controller Tests**: Testes dos endpoints REST
-- **Validation Tests**: Testes das validações customizadas
-
-## 📊 Monitoramento
-
-### Status dos Drones
-- **IDLE**: Drone disponível para pedidos
-- **IN_FLIGHT**: Drone em voo
-- **CHARGING**: Drone carregando bateria
-
-### Critérios de Alocação
-- Capacidade de peso disponível
-- Distância máxima de voo
-- Nível de bateria (mínimo 20%)
-- Prioridade do pedido
-- Posição atual do drone
-
-## 🔍 Validações
-
-### Drone
-- Limite de peso: 50 kg
-- Distância por carga: 1-100 km
-- Posição inicial: 1-100 (X e Y)
-- Bateria mínima para voo: 20%
-
-### Pedido
-- Coordenadas de destino: 1-100
-- Peso: 1-1000 kg
-- Prioridade: LOW, MEDIUM, HIGH
-
-## 🚨 Tratamento de Erros
-
-A API possui tratamento robusto de erros com códigos HTTP apropriados:
-
-- **400 Bad Request**: Dados inválidos ou validação falhou
-- **404 Not Found**: Recurso não encontrado
-- **409 Conflict**: Conflito na alocação de pedidos
-- **500 Internal Server Error**: Erro interno do servidor
-
-## 📈 Exemplos de Uso
-
-### 1. Criar um Drone
-```bash
-curl -X POST http://localhost:8080/api/v1/drones \
-  -H "Content-Type: application/json" \
-  -d '{
-    "weightLimit": 50,
-    "distancePerCargo": 20,
-    "positionX": 1,
-    "positionY": 1
-  }'
-```
-
-### 2. Criar um Pedido
-```bash
-curl -X POST http://localhost:8080/api/v1/pedidos \
-  -H "Content-Type: application/json" \
-  -d '{
-    "destinationX": 10,
-    "destinationY": 15,
-    "weight": 25,
-    "priority": "HIGH"
-  }'
-```
-
-### 3. Iniciar Voo dos Drones
-```bash
-curl -X POST http://localhost:8080/api/v1/drones/fly
-```
-
-## 🛡️ Segurança
-
-- Validação de entrada em todos os endpoints
-- Tratamento de exceções centralizado
-- Logs estruturados para auditoria
-
-## 📝 Logs
-
-A aplicação gera logs estruturados para:
-- Criação de drones e pedidos
-- Alocação de pedidos
-- Simulação de voos
-- Erros e exceções
 

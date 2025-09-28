@@ -45,7 +45,6 @@ class OrderControllerTest {
 
     @Test
     void testCreateOrder_ShouldReturnCreatedOrder() throws Exception {
-        // Given
         OrderCreateRequestDTO requestDTO = new OrderCreateRequestDTO(10, 15, 25, Priority.HIGH);
 
         Order createdOrder = Order.builder()
@@ -58,7 +57,6 @@ class OrderControllerTest {
 
         when(orderService.createOrder(any(OrderCreateRequestDTO.class))).thenReturn(createdOrder);
 
-        // When & Then
         mockMvc.perform(post("/api/v1/pedidos")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDTO)))
@@ -74,7 +72,7 @@ class OrderControllerTest {
 
     @Test
     void testCreateOrder_ShouldUseDefaultPriority_WhenNotProvided() throws Exception {
-        // Given
+
         OrderCreateRequestDTO requestDTO = new OrderCreateRequestDTO(5, 8, 15, null); // Priority not set, should default to LOW
 
         Order createdOrder = Order.builder()
@@ -87,7 +85,6 @@ class OrderControllerTest {
 
         when(orderService.createOrder(any(OrderCreateRequestDTO.class))).thenReturn(createdOrder);
 
-        // When & Then
         mockMvc.perform(post("/api/v1/pedidos")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDTO)))
@@ -103,7 +100,6 @@ class OrderControllerTest {
 
     @Test
     void testGetOrder_ShouldReturnOrder_WhenExists() throws Exception {
-        // Given
         Order order = Order.builder()
                 .id(1L)
                 .destinationX(10)
@@ -114,7 +110,6 @@ class OrderControllerTest {
 
         when(orderService.findById(1L)).thenReturn(Optional.of(order));
 
-        // When & Then
         mockMvc.perform(get("/api/v1/pedidos/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L))
@@ -128,10 +123,8 @@ class OrderControllerTest {
 
     @Test
     void testGetOrder_ShouldReturnNotFound_WhenNotExists() throws Exception {
-        // Given
         when(orderService.findById(1L)).thenReturn(Optional.empty());
 
-        // When & Then
         mockMvc.perform(get("/api/v1/pedidos/1"))
                 .andExpect(status().isNotFound());
 
@@ -140,7 +133,6 @@ class OrderControllerTest {
 
     @Test
     void testGetAllOrders_ShouldReturnAllOrders() throws Exception {
-        // Given
         Order order1 = Order.builder()
                 .id(1L)
                 .destinationX(10)
@@ -160,7 +152,6 @@ class OrderControllerTest {
         List<Order> orders = Arrays.asList(order1, order2);
         when(orderService.findAll()).thenReturn(orders);
 
-        // When & Then
         mockMvc.perform(get("/api/v1/pedidos"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2))
@@ -174,10 +165,8 @@ class OrderControllerTest {
 
     @Test
     void testGetAllOrders_ShouldReturnEmptyList_WhenNoOrders() throws Exception {
-        // Given
         when(orderService.findAll()).thenReturn(Arrays.asList());
 
-        // When & Then
         mockMvc.perform(get("/api/v1/pedidos"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(0));
@@ -187,10 +176,7 @@ class OrderControllerTest {
 
     @Test
     void testCreateOrder_ShouldReturnBadRequest_WhenInvalidData() throws Exception {
-        // Given
         OrderCreateRequestDTO requestDTO = new OrderCreateRequestDTO(0, 0, 0, null); // Invalid values
-
-        // When & Then
         mockMvc.perform(post("/api/v1/pedidos")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDTO)))
@@ -201,10 +187,7 @@ class OrderControllerTest {
 
     @Test
     void testCreateOrder_ShouldHandleNegativeValues() throws Exception {
-        // Given
         OrderCreateRequestDTO requestDTO = new OrderCreateRequestDTO(-5, -10, -15, Priority.LOW);
-
-        // When & Then
         mockMvc.perform(post("/api/v1/pedidos")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDTO)))
@@ -215,7 +198,6 @@ class OrderControllerTest {
 
     @Test
     void testCreateOrder_ShouldHandleZeroValues() throws Exception {
-        // Given
         OrderCreateRequestDTO requestDTO = new OrderCreateRequestDTO(1, 1, 1, Priority.LOW); // Use valid values instead of 0
 
         Order createdOrder = Order.builder()
@@ -228,7 +210,6 @@ class OrderControllerTest {
 
         when(orderService.createOrder(any(OrderCreateRequestDTO.class))).thenReturn(createdOrder);
 
-        // When & Then
         mockMvc.perform(post("/api/v1/pedidos")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDTO)))

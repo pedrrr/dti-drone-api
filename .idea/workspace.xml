@@ -4,7 +4,60 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="15641261-066d-4751-960c-368e807b5ff5" name="Changes" comment="" />
+    <list default="true" id="15641261-066d-4751-960c-368e807b5ff5" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GUIA_TESTES_SISTEMA.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/HELP.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/IMPLEMENTACAO_CONCLUIDA.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/contexto/contexto.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/drone-log/drone1.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/drone-log/drone2.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/drone-log/drone3.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/drone-log/drones.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/drone-log/drones_com_pedidos.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/interpretacao_implementacao.txt" beforeDir="false" afterPath="$PROJECT_DIR$/artefatos/contexto/interpretacao_implementacao.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/monitorar_drones.bat" beforeDir="false" afterPath="$PROJECT_DIR$/scripts-bat/monitorar_drones.bat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pedidos-log/pedido1.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pedidos-log/pedido2.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pedidos-log/pedido3.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/examble/drone_api/model/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/examble/drone_api/model/Order.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/examble/drone_api/service/OrderAllocatorImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/examble/drone_api/service/OrderAllocatorImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/examble/drone_api/controller/DroneControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/examble/drone_api/controller/DroneControllerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/examble/drone_api/controller/OrderControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/examble/drone_api/controller/OrderControllerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/examble/drone_api/model/DroneTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/examble/drone_api/model/DroneTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/examble/drone_api/model/OrderTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/examble/drone_api/model/OrderTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/examble/drone_api/service/DroneServiceImplTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/examble/drone_api/service/DroneServiceImplTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/examble/drone_api/service/OrderAllocatorImplTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/examble/drone_api/service/OrderAllocatorImplTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/examble/drone_api/service/OrderServiceImplTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/examble/drone_api/service/OrderServiceImplTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/examble/drone_api/validation/DroneValidatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/examble/drone_api/validation/DroneValidatorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/examble/drone_api/controller/DroneController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/examble/drone_api/controller/DroneController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/examble/drone_api/controller/OrderController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/examble/drone_api/controller/OrderController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/examble/drone_api/dto/DroneCreateRequestDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/examble/drone_api/dto/DroneCreateRequestDTO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/examble/drone_api/dto/OrderCreateRequestDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/examble/drone_api/dto/OrderCreateRequestDTO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/examble/drone_api/dto/OrderResponseDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/examble/drone_api/dto/OrderResponseDTO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/examble/drone_api/exception/GlobalExceptionHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/examble/drone_api/exception/GlobalExceptionHandler.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/examble/drone_api/mapper/DroneMapperImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/examble/drone_api/mapper/DroneMapperImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/examble/drone_api/mapper/OrderMapperImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/examble/drone_api/mapper/OrderMapperImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/examble/drone_api/model/Drone$DroneBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/examble/drone_api/model/Drone$DroneBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/examble/drone_api/model/Drone.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/examble/drone_api/model/Drone.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/examble/drone_api/model/Order$OrderBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/examble/drone_api/model/Order$OrderBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/examble/drone_api/model/Order.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/examble/drone_api/model/Order.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/examble/drone_api/service/DroneSimulationServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/examble/drone_api/service/DroneSimulationServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/examble/drone_api/service/OrderAllocatorImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/examble/drone_api/service/OrderAllocatorImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/examble/drone_api/mapper/DroneMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/examble/drone_api/mapper/DroneMapperImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/examble/drone_api/mapper/OrderMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/examble/drone_api/mapper/OrderMapperImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/com/examble/drone_api/model/DroneTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/com/examble/drone_api/model/DroneTest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/com/examble/drone_api/service/DroneServiceImplTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/com/examble/drone_api/service/DroneServiceImplTest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/com/examble/drone_api/service/OrderAllocatorImplTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/com/examble/drone_api/service/OrderAllocatorImplTest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/com/examble/drone_api/service/OrderServiceImplTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/com/examble/drone_api/service/OrderServiceImplTest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/com/examble/drone_api/validation/DroneValidatorTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/com/examble/drone_api/validation/DroneValidatorTest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/temp_drones.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/temp_pedidos.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/testes_automatizados.bat" beforeDir="false" afterPath="$PROJECT_DIR$/scripts-bat/testes_automatizados.bat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/voos-log/voo_iniciado.json" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -21,7 +74,7 @@
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/drone-api" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MavenImportPreferences">
     <option name="generalSettings">
@@ -41,15 +94,120 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Application.DroneApiApplication.executor": "Run",
+    "JUnit.DroneApiApplicationTests.executor": "Run",
+    "JUnit.DroneControllerTest.executor": "Run",
+    "JUnit.DroneServiceImplTest.executor": "Run",
+    "JUnit.DroneTest.executor": "Run",
+    "JUnit.DroneValidatorTest.executor": "Run",
+    "JUnit.OrderAllocatorImplTest.executor": "Run",
+    "JUnit.OrderAllocatorImplTest.testAllocateOrders_ShouldHandleEmptyDronesList.executor": "Run",
+    "JUnit.OrderControllerTest.executor": "Run",
+    "JUnit.OrderServiceImplTest.executor": "Run",
+    "JUnit.OrderTest.executor": "Run",
+    "JUnit.OrderTest.testOrderAllArgsConstructor_ShouldCreateOrderWithAllFields.executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "master",
+    "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/pedro/Downloads/drone-api/drone-api"
+    "last_opened_file_path": "C:/Users/pedro/OneDrive/Desktop/drone-api"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\pedro\OneDrive\Desktop\drone-api\scripts-bat" />
+      <recent name="C:\Users\pedro\OneDrive\Desktop\drone-api\artefatos\contexto" />
+    </key>
+  </component>
+  <component name="RunManager" selected="JUnit.DroneValidatorTest">
+    <configuration name="DroneServiceImplTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="drone-api" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.examble.drone_api.service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.examble.drone_api.service" />
+      <option name="MAIN_CLASS_NAME" value="com.examble.drone_api.service.DroneServiceImplTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="DroneValidatorTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="drone-api" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.examble.drone_api.validation.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.examble.drone_api.validation" />
+      <option name="MAIN_CLASS_NAME" value="com.examble.drone_api.validation.DroneValidatorTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="OrderAllocatorImplTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="drone-api" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.examble.drone_api.service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.examble.drone_api.service" />
+      <option name="MAIN_CLASS_NAME" value="com.examble.drone_api.service.OrderAllocatorImplTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="OrderAllocatorImplTest.testAllocateOrders_ShouldHandleEmptyDronesList" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="drone-api" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.examble.drone_api.service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.examble.drone_api.service" />
+      <option name="MAIN_CLASS_NAME" value="com.examble.drone_api.service.OrderAllocatorImplTest" />
+      <option name="METHOD_NAME" value="testAllocateOrders_ShouldHandleEmptyDronesList" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="OrderServiceImplTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="drone-api" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.examble.drone_api.service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.examble.drone_api.service" />
+      <option name="MAIN_CLASS_NAME" value="com.examble.drone_api.service.OrderServiceImplTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.DroneValidatorTest" />
+        <item itemvalue="JUnit.OrderServiceImplTest" />
+        <item itemvalue="JUnit.OrderAllocatorImplTest" />
+        <item itemvalue="JUnit.OrderAllocatorImplTest.testAllocateOrders_ShouldHandleEmptyDronesList" />
+        <item itemvalue="JUnit.DroneServiceImplTest" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>

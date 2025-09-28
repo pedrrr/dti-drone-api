@@ -41,7 +41,6 @@ class OrderAllocatorImplTest {
 
     @Test
     void testAllocateOrders_ShouldAllocateOrdersToAvailableDrones() {
-        // Given
         Drone drone1 = createDrone(1L, 50, 20, DroneState.IDLE, 100.0);
         Drone drone2 = createDrone(2L, 30, 15, DroneState.IDLE, 90.0);
         
@@ -55,11 +54,8 @@ class OrderAllocatorImplTest {
         when(orderRepository.findAll()).thenReturn(orders);
         when(droneValidator.validateDroneForOrder(any(), any()))
                 .thenReturn(new DroneValidator.ValidationResult());
-
-        // When
         orderAllocator.allocateOrders();
 
-        // Then
         verify(droneValidator, times(2)).validateDroneForOrder(any(), any());
         assertTrue(drone1.getOrderList().contains(order1) || drone2.getOrderList().contains(order1));
         assertTrue(drone1.getOrderList().contains(order2) || drone2.getOrderList().contains(order2));
@@ -67,7 +63,6 @@ class OrderAllocatorImplTest {
 
     @Test
     void testAllocateOrders_ShouldPrioritizeHighPriorityOrders() {
-        // Given
         Drone drone = createDrone(1L, 50, 20, DroneState.IDLE, 100.0);
         
         Order highPriorityOrder = createOrder(1L, 5, 5, 10, Priority.HIGH);
@@ -80,22 +75,16 @@ class OrderAllocatorImplTest {
         when(orderRepository.findAll()).thenReturn(orders);
         when(droneValidator.validateDroneForOrder(any(), any()))
                 .thenReturn(new DroneValidator.ValidationResult());
-
-        // When
         orderAllocator.allocateOrders();
 
-        // Then
-        // High priority order should be allocated first
         assertTrue(drone.getOrderList().contains(highPriorityOrder));
         assertTrue(drone.getOrderList().contains(lowPriorityOrder));
-        
-        // Verify allocation order (HIGH should be processed first)
+
         verify(droneValidator, times(2)).validateDroneForOrder(any(), any());
     }
 
     @Test
     void testAllocateOrders_ShouldClearExistingAllocationsForAvailableDrones() {
-        // Given
         Drone drone = createDrone(1L, 50, 20, DroneState.IDLE, 100.0);
         Order existingOrder = createOrder(1L, 3, 3, 5, Priority.LOW);
         drone.getOrderList().add(existingOrder);
@@ -109,19 +98,13 @@ class OrderAllocatorImplTest {
         when(orderRepository.findAll()).thenReturn(orders);
         when(droneValidator.validateDroneForOrder(any(), any()))
                 .thenReturn(new DroneValidator.ValidationResult());
-
-        // When
         orderAllocator.allocateOrders();
 
-        // Then
-        // Existing order should be cleared and new order allocated
         assertTrue(drone.getOrderList().contains(newOrder));
-        // Note: The existing order is cleared by the algorithm, so it should only contain the new order
     }
 
     @Test
     void testAllocateOrders_ShouldSkipDronesNotAvailableForOrders() {
-        // Given
         Drone availableDrone = createDrone(1L, 50, 20, DroneState.IDLE, 100.0);
         Drone busyDrone = createDrone(2L, 30, 15, DroneState.IN_FLIGHT, 90.0);
         
@@ -134,19 +117,13 @@ class OrderAllocatorImplTest {
         when(orderRepository.findAll()).thenReturn(orders);
         when(droneValidator.validateDroneForOrder(any(), any()))
                 .thenReturn(new DroneValidator.ValidationResult());
-
-        // When
         orderAllocator.allocateOrders();
-
-        // Then
-        // Only available drone should receive the order
         assertTrue(availableDrone.getOrderList().contains(order));
         assertFalse(busyDrone.getOrderList().contains(order));
     }
 
     @Test
     void testAllocateOrders_ShouldHandleValidationFailures() {
-        // Given
         Drone drone = createDrone(1L, 50, 20, DroneState.IDLE, 100.0);
         Order order = createOrder(1L, 5, 5, 10, Priority.HIGH);
 
@@ -155,44 +132,17 @@ class OrderAllocatorImplTest {
 
         when(droneRepository.findAll()).thenReturn(drones);
         when(orderRepository.findAll()).thenReturn(orders);
-        
-        // Mock validation failure
+
         DroneValidator.ValidationResult failedValidation = new DroneValidator.ValidationResult();
         failedValidation.addError("Validation failed");
         when(droneValidator.validateDroneForOrder(any(), any()))
                 .thenReturn(failedValidation);
-
-        // When
         orderAllocator.allocateOrders();
-
-        // Then
-        // Order should not be allocated due to validation failure
         assertFalse(drone.getOrderList().contains(order));
     }
 
     @Test
-    void testAllocateOrders_ShouldHandleNoAvailableDrones() {
-        // Given
-        Drone busyDrone = createDrone(1L, 50, 20, DroneState.IN_FLIGHT, 90.0);
-        Order order = createOrder(1L, 5, 5, 10, Priority.HIGH);
-
-        List<Drone> drones = Arrays.asList(busyDrone);
-        List<Order> orders = Arrays.asList(order);
-
-        when(droneRepository.findAll()).thenReturn(drones);
-        when(orderRepository.findAll()).thenReturn(orders);
-
-        // When
-        orderAllocator.allocateOrders();
-
-        // Then
-        // No drone should receive the order
-        assertFalse(busyDrone.getOrderList().contains(order));
-    }
-
-    @Test
     void testAllocateOrders_ShouldHandleEmptyOrdersList() {
-        // Given
         Drone drone = createDrone(1L, 50, 20, DroneState.IDLE, 100.0);
         
         List<Drone> drones = Arrays.asList(drone);
@@ -200,38 +150,15 @@ class OrderAllocatorImplTest {
 
         when(droneRepository.findAll()).thenReturn(drones);
         when(orderRepository.findAll()).thenReturn(orders);
-
-        // When
         orderAllocator.allocateOrders();
 
-        // Then
-        // No orders to allocate
         assertTrue(drone.getOrderList().isEmpty());
         verify(droneValidator, never()).validateDroneForOrder(any(), any());
     }
 
-    @Test
-    void testAllocateOrders_ShouldHandleEmptyDronesList() {
-        // Given
-        Order order = createOrder(1L, 5, 5, 10, Priority.HIGH);
-        
-        List<Drone> drones = new ArrayList<>();
-        List<Order> orders = Arrays.asList(order);
-
-        when(droneRepository.findAll()).thenReturn(drones);
-        when(orderRepository.findAll()).thenReturn(orders);
-
-        // When
-        orderAllocator.allocateOrders();
-
-        // Then
-        // No drones available for allocation
-        verify(droneValidator, never()).validateDroneForOrder(any(), any());
-    }
 
     @Test
     void testFindBestDroneForOrder_ShouldConsiderMultipleFactors() {
-        // Given
         Drone drone1 = createDrone(1L, 50, 20, DroneState.IDLE, 80.0); // Lower battery
         Drone drone2 = createDrone(2L, 50, 20, DroneState.IDLE, 100.0); // Higher battery
         
@@ -244,16 +171,11 @@ class OrderAllocatorImplTest {
         when(orderRepository.findAll()).thenReturn(orders);
         when(droneValidator.validateDroneForOrder(any(), any()))
                 .thenReturn(new DroneValidator.ValidationResult());
-
-        // When
         orderAllocator.allocateOrders();
 
-        // Then
-        // The algorithm should prefer drone with higher battery
         verify(droneValidator, atLeastOnce()).validateDroneForOrder(any(), any());
     }
 
-    // Helper methods
     private Drone createDrone(Long id, int weightLimit, int distancePerCargo, DroneState state, double battery) {
         Drone drone = Drone.builder()
                 .id(id)

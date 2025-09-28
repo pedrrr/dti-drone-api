@@ -1,0 +1,110 @@
+INTERPRETAÇÃO DAS FUNCIONALIDADES E PLANO DE IMPLEMENTAÇÃO
+================================================================
+
+ANÁLISE DO SISTEMA ATUAL:
+-------------------------
+O sistema já possui uma estrutura básica em Spring Boot com:
+- Modelos: Drone e Order com campos básicos
+- Enums: DroneState (IDLE, RECHARGING, IN_FLIGHT, DELIVERING, RETURNING_TO_BASE) e Priority (HIGH, MEDIUM, LOW)
+- Repositórios e serviços básicos para CRUD
+- OrderAllocatorImpl com lógica básica de alocação
+- Controladores com endpoints básicos 
+
+FUNCIONALIDADES IDENTIFICADAS:
+------------------------------
+1. SISTEMA DE COORDENADAS BIDIMENSIONAIS:
+   - Base de operações em (1,1)
+   - Drones com posição atual (positionX, positionY)
+   - Pedidos com destino (destinationX, destinationY)
+
+2. GESTÃO DE DRONES:
+   - Capacidade máxima de peso (weightLimit)
+   - Distância máxima por carga (distancePerCargo)
+   - Sistema de bateria (campo ausente - precisa ser adicionado)
+   - Lista de pedidos atribuídos (orderList)
+
+3. GESTÃO DE PEDIDOS:
+   - Peso do pacote (weight)
+   - Prioridade (HIGH, MEDIUM, LOW)
+   - Coordenadas de destino
+
+4. OTIMIZAÇÃO DE ALOCAÇÃO:
+   - Minimizar número de viagens
+   - Respeitar limites de peso e alcance
+   - Realocação automática a cada novo pedido
+
+5. SIMULAÇÃO DE ESTADOS DOS DRONES:
+   - IDLE: Disponível para receber pedidos
+   - RECHARGING: Carregando bateria (<80% e na base)
+   - IN_FLIGHT: Em voo para entrega
+   - DELIVERING: Entregando no destino
+   - RETURNING_TO_BASE: Voltando para base
+
+6. SISTEMA DE BATERIA:
+   - Drenagem por distância/tempo
+   - Recarga automática quando <80% na base
+   - Recarga até 100% para voltar ao IDLE
+
+PASSOS DE IMPLEMENTAÇÃO PROPOSTOS:
+==================================
+
+FASE 1 - COMPLEMENTAR MODELOS:
+1. Adicionar campo 'battery' (double) no modelo Drone
+2. Adicionar campo 'state' (DroneState) no modelo Drone
+3. Adicionar campo 'currentBattery' para controle em tempo real
+4. Adicionar campos de timestamp para controle de estados
+
+FASE 2 - MELHORAR SISTEMA DE ALOCAÇÃO:
+1. Modificar OrderAllocatorImpl para considerar:
+   - Apenas drones em estado IDLE
+   - Otimização por distância e capacidade
+   - Priorização por prioridade dos pedidos
+   - Realocação completa ao adicionar novo pedido
+
+FASE 3 - IMPLEMENTAR SIMULAÇÃO DE VOOS:
+1. Criar serviço DroneSimulationService para:
+   - Gerenciar transições de estado
+   - Simular movimento dos drones
+   - Controlar drenagem de bateria
+   - Gerenciar recarga automática
+
+FASE 4 - COMPLETAR ENDPOINTS:
+1. Implementar POST /api/v1/drones/fly para:
+   - Iniciar voo de drones com pedidos
+   - Alterar estado para IN_FLIGHT
+   - Iniciar simulação de movimento
+
+FASE 5 - SISTEMA DE THREADS/TIMERS:
+1. Implementar sistema assíncrono para:
+   - Simulação de movimento em tempo real
+   - Controle de duração dos estados
+   - Drenagem progressiva de bateria
+   - Transições automáticas de estado
+
+FASE 6 - VALIDAÇÕES E RESTRIÇÕES:
+1. Implementar validações para:
+   - Rejeição de pedidos que excedam capacidade
+   - Verificação de distância máxima
+   - Controle de bateria mínima para voo
+   - Prevenção de alocação em drones indisponíveis
+
+DETALHES TÉCNICOS:
+-----------------
+- Usar @Async e @Scheduled para simulação
+- Implementar Thread.sleep() para simular tempo de voo
+- Usar CompletableFuture para operações assíncronas
+- Criar sistema de eventos para notificar mudanças de estado
+- Implementar logging para monitoramento
+
+CONSIDERAÇÕES DE PERFORMANCE:
+-----------------------------
+- Otimizar algoritmo de alocação (complexidade O(n*m))
+- Usar cache para consultas frequentes
+- Implementar paginação para listas grandes
+- Considerar uso de banco de dados para persistência
+
+PRÓXIMOS PASSOS:
+---------------
+Aguardar confirmação dos passos propostos antes de iniciar implementação.
+Modificações nos passos serão documentadas conforme necessário.
+

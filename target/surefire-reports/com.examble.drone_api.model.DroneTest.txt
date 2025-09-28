@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: com.examble.drone_api.model.DroneTest
--------------------------------------------------------------------------------
-Tests run: 25, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.047 s -- in com.examble.drone_api.model.DroneTest

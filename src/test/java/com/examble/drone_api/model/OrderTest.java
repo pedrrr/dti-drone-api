@@ -9,6 +9,7 @@ class OrderTest {
 
     @Test
     void testOrderBuilder_ShouldCreateOrderWithDefaultPriority() {
+        // When
         Order order = Order.builder()
                 .id(1L)
                 .destinationX(10)
@@ -16,6 +17,7 @@ class OrderTest {
                 .weight(25)
                 .build();
 
+        // Then
         assertEquals(1L, order.getId());
         assertEquals(10, order.getDestinationX());
         assertEquals(15, order.getDestinationY());
@@ -25,6 +27,7 @@ class OrderTest {
 
     @Test
     void testOrderBuilder_ShouldCreateOrderWithCustomPriority() {
+        // When
         Order order = Order.builder()
                 .id(2L)
                 .destinationX(5)
@@ -33,6 +36,7 @@ class OrderTest {
                 .priority(Priority.HIGH)
                 .build();
 
+        // Then
         assertEquals(2L, order.getId());
         assertEquals(5, order.getDestinationX());
         assertEquals(8, order.getDestinationY());
@@ -42,8 +46,10 @@ class OrderTest {
 
     @Test
     void testOrderNoArgsConstructor_ShouldCreateEmptyOrder() {
+        // When
         Order order = new Order();
 
+        // Then
         assertNull(order.getId());
         assertEquals(0, order.getDestinationX());
         assertEquals(0, order.getDestinationY());
@@ -53,8 +59,10 @@ class OrderTest {
 
     @Test
     void testOrderAllArgsConstructor_ShouldCreateOrderWithAllFields() {
-        Order order = new Order(1L, 20, 25, 30, Priority.MEDIUM);
+        // When
+        Order order = new Order(1L, 20, 25, 30, Priority.MEDIUM, false);
 
+        // Then
         assertEquals(1L, order.getId());
         assertEquals(20, order.getDestinationX());
         assertEquals(25, order.getDestinationY());
@@ -64,15 +72,17 @@ class OrderTest {
 
     @Test
     void testOrderSetters_ShouldUpdateFields() {
-
+        // Given
         Order order = new Order();
 
+        // When
         order.setId(3L);
         order.setDestinationX(12);
         order.setDestinationY(18);
         order.setWeight(22);
         order.setPriority(Priority.HIGH);
 
+        // Then
         assertEquals(3L, order.getId());
         assertEquals(12, order.getDestinationX());
         assertEquals(18, order.getDestinationY());
@@ -82,34 +92,37 @@ class OrderTest {
 
     @Test
     void testOrderEquals_ShouldReturnTrue_WhenSameId() {
-
+        // Given
         Order order1 = Order.builder().id(1L).destinationX(5).destinationY(5).weight(10).build();
         Order order2 = Order.builder().id(1L).destinationX(5).destinationY(5).weight(10).build();
 
+        // When & Then
         assertEquals(order1, order2);
     }
 
     @Test
     void testOrderEquals_ShouldReturnFalse_WhenDifferentId() {
-
+        // Given
         Order order1 = Order.builder().id(1L).destinationX(5).destinationY(5).weight(10).build();
         Order order2 = Order.builder().id(2L).destinationX(5).destinationY(5).weight(10).build();
 
+        // When & Then
         assertNotEquals(order1, order2);
     }
 
     @Test
     void testOrderHashCode_ShouldReturnSameValue_WhenSameId() {
-
+        // Given
         Order order1 = Order.builder().id(1L).destinationX(5).destinationY(5).weight(10).build();
         Order order2 = Order.builder().id(1L).destinationX(5).destinationY(5).weight(10).build();
 
+        // When & Then
         assertEquals(order1.hashCode(), order2.hashCode());
     }
 
     @Test
     void testOrderToString_ShouldContainAllFields() {
-
+        // Given
         Order order = Order.builder()
                 .id(1L)
                 .destinationX(10)
@@ -118,8 +131,10 @@ class OrderTest {
                 .priority(Priority.HIGH)
                 .build();
 
+        // When
         String orderString = order.toString();
 
+        // Then
         assertTrue(orderString.contains("id=1"));
         assertTrue(orderString.contains("destinationX=10"));
         assertTrue(orderString.contains("destinationY=20"));
@@ -127,6 +142,7 @@ class OrderTest {
         assertTrue(orderString.contains("priority=HIGH"));
     }
 }
+
 
 
 

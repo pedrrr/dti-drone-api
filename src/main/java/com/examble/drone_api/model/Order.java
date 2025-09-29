@@ -16,16 +16,4 @@ public class Order {
     @Builder.Default
     private Priority priority = Priority.LOW;
     private boolean delivered = false;
-
-    public Order(Long id,
-                 int destinationX,
-                 int destinationY,
-                 int weight,
-                 Priority priority) {
-        this.id = id;
-        this.destinationX = destinationX;
-        this.destinationY = destinationY;
-        this.weight = weight;
-        this.priority = priority;
-    }
 }

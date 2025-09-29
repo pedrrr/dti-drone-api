@@ -1,12 +1,12 @@
 package com.examble.drone_api.controller;
 
 import com.examble.drone_api.dto.DroneCreateRequestDTO;
-import com.examble.drone_api.dto.DroneResponseDTO;
-import com.examble.drone_api.exception.ResourceNotFoundException;
 import com.examble.drone_api.model.Drone;
 import com.examble.drone_api.model.type.DroneState;
+import com.examble.drone_api.service.interfaces.DashboardService;
 import com.examble.drone_api.service.interfaces.DroneService;
 import com.examble.drone_api.service.interfaces.DroneSimulationService;
+import com.examble.drone_api.service.DashboardServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -36,12 +35,15 @@ class DroneControllerTest {
     @Mock
     private DroneSimulationService droneSimulationService;
 
+    @Mock
+    private DashboardService dashboardService;
+
     private MockMvc mockMvc;
     private ObjectMapper objectMapper;
 
     @BeforeEach
     void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(new DroneController(droneService, droneSimulationService))
+        mockMvc = MockMvcBuilders.standaloneSetup(new DroneController(droneService, droneSimulationService, dashboardService))
                 .setControllerAdvice(new com.examble.drone_api.exception.GlobalExceptionHandler())
                 .build();
         objectMapper = new ObjectMapper();
@@ -64,6 +66,7 @@ class DroneControllerTest {
 
         when(droneService.createDrone(any(DroneCreateRequestDTO.class))).thenReturn(createdDrone);
 
+        // When & Then
         mockMvc.perform(post("/api/v1/drones")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDTO)))
@@ -81,6 +84,7 @@ class DroneControllerTest {
 
     @Test
     void testGetDrone_ShouldReturnDrone_WhenExists() throws Exception {
+        // Given
         Drone drone = Drone.builder()
                 .id(1L)
                 .positionX(1)
@@ -93,6 +97,7 @@ class DroneControllerTest {
 
         when(droneService.findById(1L)).thenReturn(Optional.of(drone));
 
+        // When & Then
         mockMvc.perform(get("/api/v1/drones/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L))
@@ -108,7 +113,10 @@ class DroneControllerTest {
 
     @Test
     void testGetDrone_ShouldReturnNotFound_WhenNotExists() throws Exception {
+        // Given
         when(droneService.findById(1L)).thenReturn(Optional.empty());
+
+        // When & Then
         mockMvc.perform(get("/api/v1/drones/1"))
                 .andExpect(status().isNotFound());
 
@@ -117,6 +125,7 @@ class DroneControllerTest {
 
     @Test
     void testGetAllDrones_ShouldReturnAllDrones() throws Exception {
+        // Given
         Drone drone1 = Drone.builder()
                 .id(1L)
                 .positionX(1)
@@ -140,6 +149,7 @@ class DroneControllerTest {
         List<Drone> drones = Arrays.asList(drone1, drone2);
         when(droneService.findAll()).thenReturn(drones);
 
+        // When & Then
         mockMvc.perform(get("/api/v1/drones"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2))
@@ -151,6 +161,7 @@ class DroneControllerTest {
 
     @Test
     void testFlyDrones_ShouldReturnSuccess_WhenDronesHaveOrders() throws Exception {
+        // Given
         Drone drone1 = Drone.builder()
                 .id(1L)
                 .positionX(1)
@@ -175,6 +186,7 @@ class DroneControllerTest {
         when(droneService.findAll()).thenReturn(drones);
         doNothing().when(droneSimulationService).startAllDronesWithOrders();
 
+        // When & Then
         mockMvc.perform(post("/api/v1/drones/fly"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("Comando de voo executado com sucesso"))
@@ -188,8 +200,10 @@ class DroneControllerTest {
 
     @Test
     void testFlyDrones_ShouldReturnError_WhenExceptionOccurs() throws Exception {
+        // Given
         when(droneService.findAll()).thenThrow(new RuntimeException("Database error"));
 
+        // When & Then
         mockMvc.perform(post("/api/v1/drones/fly"))
                 .andExpect(status().isInternalServerError())
                 .andExpect(jsonPath("$.error").value("Erro ao iniciar voo dos drones: Database error"))
@@ -201,8 +215,10 @@ class DroneControllerTest {
 
     @Test
     void testCreateDrone_ShouldReturnBadRequest_WhenInvalidData() throws Exception {
+        // Given
         DroneCreateRequestDTO requestDTO = new DroneCreateRequestDTO(0, 0, 0, 0); // Invalid values
 
+        // When & Then
         mockMvc.perform(post("/api/v1/drones")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDTO)))

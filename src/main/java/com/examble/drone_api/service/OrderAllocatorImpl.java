@@ -47,16 +47,18 @@ public class OrderAllocatorImpl implements OrderAllocator {
                     validation.throwIfInvalid();
                     
                     bestDrone.assignOrder(order);
-                    System.out.println("Pedido " + order.getId() + " alocado no drone " + bestDrone.getId());
+                    System.out.println("✅ Pedido " + order.getId() + " alocado no drone " + bestDrone.getId());
                 } catch (Exception e) {
-                    System.out.println("Pedido " + order.getId() + " não pôde ser alocado: " + e.getMessage());
+                    System.out.println("⚠ Pedido " + order.getId() + " não pôde ser alocado: " + e.getMessage());
+                    // Log da exceção para debug
                     if (e instanceof OrderAllocationException) {
                         System.err.println("Erro de alocação: " + e.getMessage());
                     }
                 }
             } else {
-                System.out.println("Pedido " + order.getId() + " não pôde ser alocado - nenhum drone disponível.");
-                throw OrderAllocationException.noAvailableDrones(order.getId());
+                System.out.println("⚠ Pedido " + order.getId() + " não pôde ser alocado - nenhum drone disponível.");
+                // Opcional: lançar exceção se necessário
+                // throw OrderAllocationException.noAvailableDrones(order.getId());
             }
         }
     }
@@ -65,7 +67,7 @@ public class OrderAllocatorImpl implements OrderAllocator {
         return drones.stream()
                 .filter(drone -> drone.isAvailableForOrders())
                 .filter(drone -> drone.canCarry(order) && drone.canReach(order))
-                .filter(drone -> drone.getBattery() >= 20.0)
+                .filter(drone -> drone.getBattery() >= 20.0) // Bateria mínima para voo
                 .min(Comparator
                         .<Drone>comparingDouble(drone -> calculateAllocationScore(drone, order))
                         .thenComparingDouble(drone -> drone.calculateDistance(order))
@@ -74,10 +76,12 @@ public class OrderAllocatorImpl implements OrderAllocator {
     }
 
     private double calculateAllocationScore(Drone drone, Order order) {
+        // Score baseado em eficiência: menor score = melhor drone
         double distance = drone.calculateDistance(order);
         double weightUtilization = (double) drone.getTotalWeight() / drone.getWeightLimit();
         double batteryLevel = drone.getBattery() / 100.0;
-
+        
+        // Penalizar drones com baixa bateria e alta utilização de peso
         return distance + (1.0 - batteryLevel) * 10 + weightUtilization * 5;
     }
 }

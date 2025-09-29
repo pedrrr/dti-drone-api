@@ -6,6 +6,7 @@ import com.examble.drone_api.model.Order;
 import com.examble.drone_api.model.type.DroneState;
 import com.examble.drone_api.repository.interfaces.DroneRepository;
 import com.examble.drone_api.service.interfaces.DroneSimulationService;
+import com.examble.drone_api.service.interfaces.DroneMetricsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -14,15 +15,19 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 @Slf4j
 public class DroneSimulationServiceImpl implements DroneSimulationService {
 
     private final DroneRepository droneRepository;
+    private final DroneMetricsService metricsService;
+    private final ConcurrentHashMap<Long, Long> flightStartTimes = new ConcurrentHashMap<>();
     
-    public DroneSimulationServiceImpl(DroneRepository droneRepository) {
+    public DroneSimulationServiceImpl(DroneRepository droneRepository, DroneMetricsService metricsService) {
         this.droneRepository = droneRepository;
+        this.metricsService = metricsService;
     }
 
     private static final int BASE_X = 1;
@@ -102,8 +107,7 @@ public class DroneSimulationServiceImpl implements DroneSimulationService {
             // Remover pedido entregue
             if (drone.hasOrders()) {
                 Order deliveredOrder = drone.getOrderList().remove(0);
-                log.info("Drone {} entregou pedido {}", drone.getId(), deliveredOrder.getId());
-                deliveredOrder.setDelivered(true);
+                markOrderAsDelivered(drone, deliveredOrder);
             }
             
             // Se ainda tem pedidos, continuar para próximo destino
@@ -126,6 +130,15 @@ public class DroneSimulationServiceImpl implements DroneSimulationService {
         
         // Se chegou à base
         if (drone.getPositionX() == BASE_X && drone.getPositionY() == BASE_Y) {
+            // Registrar tempo total de voo
+            Long flightStartTime = flightStartTimes.get(drone.getId());
+            if (flightStartTime != null) {
+                long totalFlightTime = System.currentTimeMillis() - flightStartTime;
+                metricsService.recordFlightTime(drone.getId(), totalFlightTime);
+                flightStartTimes.remove(drone.getId());
+                log.info("Tempo total de voo registrado para drone {}: {}ms", drone.getId(), totalFlightTime);
+            }
+            
             drone.changeState(DroneState.IDLE);
             log.info("Drone {} retornou à base e está IDLE", drone.getId());
         }
@@ -167,6 +180,9 @@ public class DroneSimulationServiceImpl implements DroneSimulationService {
                     "Bateria insuficiente para voo: " + drone.getBattery() + "%");
             }
             
+            // Registrar tempo de início do voo para métricas
+            flightStartTimes.put(drone.getId(), System.currentTimeMillis());
+            
             drone.changeState(DroneState.IN_FLIGHT);
             log.info("Drone {} iniciou voo com {} pedidos", drone.getId(), drone.getOrderList().size());
         });
@@ -181,5 +197,44 @@ public class DroneSimulationServiceImpl implements DroneSimulationService {
                 startDroneFlight(drone);
             }
         }
+    }
+    
+    /**
+     * Marca um pedido como entregue e registra métricas
+     */
+    public void markOrderAsDelivered(Drone drone, Order order) {
+        log.info("Drone {} entregou pedido {}", drone.getId(), order.getId());
+        order.setDelivered(true);
+        
+        // Registrar métricas de entrega
+        Long flightStartTime = flightStartTimes.get(drone.getId());
+        if (flightStartTime != null) {
+            long deliveryTime = System.currentTimeMillis() - flightStartTime;
+            metricsService.recordDelivery(drone.getId(), deliveryTime);
+            log.info("Métrica registrada: Drone {} completou entrega em {}ms", drone.getId(), deliveryTime);
+        } else {
+            // Fallback: usar tempo estimado baseado na distância
+            long estimatedDeliveryTime = calculateEstimatedDeliveryTime(drone);
+            metricsService.recordDelivery(drone.getId(), estimatedDeliveryTime);
+            log.info("Métrica estimada registrada: Drone {} completou entrega em {}ms", drone.getId(), estimatedDeliveryTime);
+        }
+    }
+    
+    /**
+     * Calcula tempo estimado de entrega baseado na distância percorrida
+     */
+    private long calculateEstimatedDeliveryTime(Drone drone) {
+        if (drone.getOrderList() == null || drone.getOrderList().isEmpty()) {
+            return 1000; // 1 segundo padrão
+        }
+        
+        // Calcular distância total baseada na posição atual vs base
+        double distance = Math.sqrt(
+            Math.pow(drone.getPositionX() - 1, 2) + 
+            Math.pow(drone.getPositionY() - 1, 2)
+        );
+        
+        // Estimativa: 2 segundos por unidade de distância + 1 segundo base
+        return (long) (distance * 2000 + 1000);
     }
 }

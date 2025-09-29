@@ -154,7 +154,23 @@ GET http://localhost:8080/api/v1/drones
 
 ---
 
-### **8. TESTAR VALIDAÇÕES (PEDIDOS INVÁLIDOS)**
+### **8. CHECAR INFORMAÇÕES COLETADAS DURANTE FUNCIONAMENTO DO SISTEMA (DASHBOARD)**
+
+**Execute repetidamente (a cada 5-10 segundos):**
+```http
+GET http://localhost:8080/api/v1/drones/dashboard
+```
+
+**Retorna informações detalhadas sobre o desempenho dos drones, incluindo:**
+
+- **Quantidade total de entregas realizadas**
+- **Tempo médio por entrega**
+- **Drone mais eficiente**
+- **Métricas detalhadas por drone**
+
+---
+
+### **9. TESTAR VALIDAÇÕES (PEDIDOS INVÁLIDOS)**
 
 #### **Pedido que excede peso máximo:**
 ```http
@@ -190,7 +206,7 @@ Erro 400 - "Posição X deve ser maior que 0"
 
 ---
 
-### **9. TESTAR RECARGA AUTOMÁTICA**
+### **10. TESTAR RECARGA AUTOMÁTICA**
 
 **Para testar recarga:**
 1. Crie um drone com bateria baixa (simule no código ou aguarde uso natural)
@@ -200,27 +216,6 @@ Erro 400 - "Posição X deve ser maior que 0"
 
 ---
 
-### **10. TESTE DE STRESS - MÚLTIPLOS PEDIDOS**
-
-**Crie vários pedidos rapidamente:**
-```http
-POST http://localhost:8080/api/v1/pedidos
-Content-Type: application/json
-```
-```json
-{
-  "destinationX": 7,
-  "destinationY": 7,
-  "weight": 12,
-  "priority": "HIGH"
-}
-```
-
-**Repita 5-10 vezes com coordenadas diferentes**
-
-**Esperado:** Sistema realoca automaticamente todos os pedidos de forma otimizada
-
----
 
 ## **OBSERVAÇÕES IMPORTANTES**
 
@@ -238,13 +233,28 @@ Content-Type: application/json
 - `RECHARGING`: Carregando bateria
 
 ### **Pontos de Verificação:**
-1. Alocação automática funciona
-2. Simulação de movimento funciona
-3. Estados mudam corretamente
+1. Alocação automática
+2. Simulação de movimento
+3. Estados mudam de acordo com situação de entrega e do drone
 4. Bateria drena e recarrega
 5. Validações impedem dados inválidos
-6. Sistema otimiza distribuição
+6. Sistema otimiza distribuição de pedidos
 
+---
+
+## **DETALHES DO SISTEMA**
+### ALGORITMO DE ALOCAÇÃO
+
+O sistema usa um score de eficiência que considera:
+- **Distância** até o destino
+- **Nível de bateria** (penaliza baixa bateria)
+- **Utilização de peso** (otimiza capacidade)
+- **Prioridade** dos pedidos (HIGH primeiro)
+
+**Fórmula do Score:**
+```
+Score = Distância + (1 - Bateria/100) × 10 + (Peso_Utilizado/Peso_Máximo) × 5
+```
 ---
 
 ## **SOLUÇÃO DE PROBLEMAS**
@@ -266,27 +276,6 @@ Content-Type: application/json
 
 ---
 
-## **GERAIS DO SISTEMA**
 
-Após a análise, você identificará implementados:
-- Sistema funcionando perfeitamente
-- Drones se movendo pela malha
-- Entregas sendo realizadas
-- Bateria sendo gerenciada
-- Validações funcionando
-- Otimização de alocação ativa
-
-## ALGORITMO DE ALOCAÇÃO
-
-O sistema usa um score de eficiência que considera:
-- **Distância** até o destino
-- **Nível de bateria** (penaliza baixa bateria)
-- **Utilização de peso** (otimiza capacidade)
-- **Prioridade** dos pedidos (HIGH primeiro)
-
-**Fórmula do Score:**
-```
-Score = Distância + (1 - Bateria/100) × 10 + (Peso_Utilizado/Peso_Máximo) × 5
-```
 
 
